@@ -1,6 +1,11 @@
-src/test/
+src/__snapshots__/
+src/index.test.ts
 .editorconfig
 .gitignore
 manualRun.ts
 yarn.lock
 *.log
+/jest.config.js
+/index.d.ts
+/cjs/
+!/cjs/src/index.js

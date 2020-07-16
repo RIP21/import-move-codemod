@@ -10,16 +10,17 @@ const check = `
 const options = {
   module: {
     from: "one",
-    to: "two"
+    to: "two",
   },
   specifiers: {
-    One: "default"
-  }
+    One: "default",
+  },
 } as Config;
 
-const result = transform(check, {
-  plugins: [["./src/index.ts", options]]
-}).code;
+const result =
+  transform(check, {
+    plugins: [["./src/index.ts", options]],
+  })?.code ?? "";
 
 console.log(
   format(result, { semi: false, singleQuote: true, parser: "babel" })

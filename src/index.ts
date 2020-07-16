@@ -3,12 +3,14 @@ import { types as t, PluginObj } from "@babel/core";
 import typescript from "@babel/plugin-syntax-typescript";
 import { Program, ImportSpecifier } from "@babel/types";
 
+type StringMap = { [key: string]: string };
+
 export type Config = {
   module: {
     from: string;
     to: string;
   };
-  specifiers: string[] | { [key: string]: string };
+  specifiers: string[] | StringMap;
 };
 
 const getFrom = (config: Config) => {
@@ -51,11 +53,11 @@ const shouldMoveAll = (config: Config) => {
 
 const getNamedIdentifierToDefault = (config: Config) => {
   return Object.entries(config.specifiers).find(
-    ([key, value]) => value === "default"
-  )[0];
+    ([_, value]) => value === "default"
+  )?.[0];
 };
 
-export default declare((api, options: Config) => {
+export default declare((_: any, options: Config) => {
   if (
     options.specifiers?.length === 0 ||
     typeof options.specifiers !== "object"
@@ -84,6 +86,7 @@ export default declare((api, options: Config) => {
           if (t.isImportDeclaration(arg)) {
             return arg.source.value === from;
           }
+          return;
         });
         if (isFromImportIsPresent) {
           return;
@@ -95,12 +98,6 @@ export default declare((api, options: Config) => {
         const to = getTo(options);
         const specifiers = getSpecifiersList(options);
         const program = path.parent as Program;
-
-        function filterMovedToDefaultNamedImport() {
-          return (it) =>
-            t.isImportSpecifier(it) &&
-            !(it.imported.name === getNamedIdentifierToDefault(options));
-        }
 
         if (t.isImportDeclaration(node) && node.source.value === from) {
           if (shouldMoveAll(options)) {
@@ -117,8 +114,13 @@ export default declare((api, options: Config) => {
                 t.identifier(getNamedIdentifierToDefault(options))
               ),
             ];
+
+            const filterMovedToDefaultNamedImport = (it: any) =>
+              t.isImportSpecifier(it) &&
+              !(it.imported.name === getNamedIdentifierToDefault(options));
+
             path.node.specifiers = path.node.specifiers.filter(
-              filterMovedToDefaultNamedImport()
+              filterMovedToDefaultNamedImport
             );
           }
           const namedSpecifiersToMove = node.specifiers.filter(
@@ -129,17 +131,18 @@ export default declare((api, options: Config) => {
           // ['One', 'Two'] case
           if (thereIsSpecifiersToMove) {
             if (shouldRenameSpecifiers(options)) {
+              const namesMapping = options.specifiers as StringMap;
               const renamedNamedImports = namedSpecifiersToMove.map<
                 ImportSpecifier
               >((it: ImportSpecifier) => ({
                 ...it,
                 local: {
                   ...it.local,
-                  name: options.specifiers[it.local.name],
+                  name: namesMapping[it.local.name],
                 },
                 imported: {
                   ...it.imported,
-                  name: options.specifiers[it.imported.name],
+                  name: namesMapping[it.imported.name],
                 },
               }));
               newImportDeclaration.specifiers = newImportDeclaration.specifiers.concat(
@@ -176,14 +179,16 @@ export default declare((api, options: Config) => {
             const aDefaultSpecifier = node.specifiers.find((it) =>
               t.isImportDefaultSpecifier(it)
             );
-            const newNamedSpecifier = t.importSpecifier(
-              aDefaultSpecifier.local,
-              aDefaultSpecifier.local
-            );
-            newImportDeclaration.specifiers.unshift(newNamedSpecifier);
-            path.node.specifiers = path.node.specifiers.filter(
-              (it) => !t.isImportDefaultSpecifier(it)
-            );
+            if (aDefaultSpecifier) {
+              const newNamedSpecifier = t.importSpecifier(
+                aDefaultSpecifier.local,
+                aDefaultSpecifier.local
+              );
+              newImportDeclaration.specifiers.unshift(newNamedSpecifier);
+              path.node.specifiers = path.node.specifiers.filter(
+                (it) => !t.isImportDefaultSpecifier(it)
+              );
+            }
           }
           if (newImportDeclaration.specifiers.length !== 0) {
             program.body.unshift(newImportDeclaration);

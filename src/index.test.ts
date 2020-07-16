@@ -7,11 +7,11 @@ pluginTester({
   pluginName: "import-rename-codemod",
   plugin: transform,
   snapshot: true,
-  formatResult: output =>
+  formatResult: (output: any) =>
     format(output, {
       semi: true,
       singleQuote: true,
-      parser: "babel"
+      parser: "babel",
     }),
   tests: [
     {
@@ -23,10 +23,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["One"]
-      } as Config
+        specifiers: ["One"],
+      } as Config,
     },
     {
       title:
@@ -37,10 +37,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["Two"]
-      } as Config
+        specifiers: ["Two"],
+      } as Config,
     },
     {
       title:
@@ -51,10 +51,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["One", "Two"]
-      } as Config
+        specifiers: ["One", "Two"],
+      } as Config,
     },
     {
       title:
@@ -65,10 +65,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["One", "Two"]
-      } as Config
+        specifiers: ["One", "Two"],
+      } as Config,
     },
     {
       title: "When named to named and imports should be renamed",
@@ -78,13 +78,13 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
         specifiers: {
           One: "OneR",
-          Two: "TwoR"
-        }
-      } as Config
+          Two: "TwoR",
+        },
+      } as Config,
     },
     {
       title:
@@ -95,13 +95,13 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
         specifiers: {
           One: "OneR",
-          Two: "TwoR"
-        }
-      } as Config
+          Two: "TwoR",
+        },
+      } as Config,
     },
     {
       title: "When named to default should change import",
@@ -111,12 +111,12 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
         specifiers: {
-          One: "default"
-        }
-      } as Config
+          One: "default",
+        },
+      } as Config,
     },
     {
       title: "When wildcard should move all imports",
@@ -126,10 +126,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["*"]
-      } as Config
+        specifiers: ["*"],
+      } as Config,
     },
     {
       title: "Should move only default import",
@@ -139,10 +139,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["default"]
-      } as Config
+        specifiers: ["default"],
+      } as Config,
     },
     {
       title: "Should move default import and named imports",
@@ -152,10 +152,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["default", "One", "Two"]
-      } as Config
+        specifiers: ["default", "One", "Two"],
+      } as Config,
     },
     {
       title: "Should move default to named",
@@ -165,10 +165,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: { default: "One" }
-      } as Config
+        specifiers: { default: "One" },
+      } as Config,
     },
     {
       title: "Should move default to named while keeping others that are left",
@@ -178,10 +178,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: { default: "One" }
-      } as Config
+        specifiers: { default: "One" },
+      } as Config,
     },
     {
       title: "Should move default to named and move others along",
@@ -191,10 +191,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: { default: "One", Two: "Two" }
-      } as Config
+        specifiers: { default: "One", Two: "Two" },
+      } as Config,
     },
     {
       title: "Should move default to default",
@@ -204,10 +204,10 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: ["default"]
-      } as Config
+        specifiers: ["default"],
+      } as Config,
     },
     {
       title:
@@ -218,12 +218,12 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: { One: "default", Two: "default" }
+        specifiers: { One: "default", Two: "default" },
       } as Config,
       error:
-        "It's impossible to make two named imports into two defaults! You should only have one 'default' value in your specifiers mapping"
+        "It's impossible to make two named imports into two defaults! You should only have one 'default' value in your specifiers mapping",
     },
     {
       title: "Should fail when provided with wrong config shape",
@@ -233,12 +233,12 @@ pluginTester({
       pluginOptions: {
         module: {
           from: "one",
-          to: "two"
+          to: "two",
         },
-        specifiers: "Wrong"
+        specifiers: "Wrong",
       },
       error:
-        "Wrong specifiers format provided! It should be non-empty object or array."
-    }
-  ]
+        "Wrong specifiers format provided! It should be non-empty object or array.",
+    },
+  ],
 });
