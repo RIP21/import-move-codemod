@@ -31,7 +31,7 @@ Before the run you need to create a file with a config, let say `codemod.json`
 
 Then for example to run codemod against all the files in `/src` run 
 ```
-npx @codemod/cli --p import-move-codemod -o import-move-codemod=@codemod.json --printer prettier /src 
+npx @codemod/cli -p import-move-codemod -o import-move-codemod=@codemod.json --printer prettier /src 
 ```
 
 
