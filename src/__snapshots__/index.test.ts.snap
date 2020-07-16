@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`import-rename-codemod Should fail when asked to create impossible two or more defaults from named imports: Should fail when asked to create impossible two or more defaults from named imports 1`] = `
+
+import One from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+Error: [BABEL] unknown: It's impossible to make two or more named imports into two or more defaults in one import statement! You should only have one 'default' value in your specifiers mapping (While processing: "base$0")
+
+`;
+
+exports[`import-rename-codemod Should fail when provided with wrong config shape: Should fail when provided with wrong config shape 1`] = `
+
+import One from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+Error: [BABEL] unknown: Wrong specifiers format provided! It should be non-empty object or array. (While processing: "base$0")
+
+`;
+
+exports[`import-rename-codemod Should move default import and named imports: Should move default import and named imports 1`] = `
+
+import ADefault, { One, Two, Three } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import ADefault, { One, Two } from 'two';
+import { Three } from 'one';
+
+
+`;
+
+exports[`import-rename-codemod Should move default to default: Should move default to default 1`] = `
+
+import One from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import One from 'two';
+
+
+`;
+
+exports[`import-rename-codemod Should move default to named and move others along: Should move default to named and move others along 1`] = `
+
+import One, { Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { One, Two } from 'two';
+
+
+`;
+
+exports[`import-rename-codemod Should move default to named while keeping others that are left: Should move default to named while keeping others that are left 1`] = `
+
+import One, { Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { One } from 'two';
+import { Two } from 'one';
+
+
+`;
+
+exports[`import-rename-codemod Should move default to named: Should move default to named 1`] = `
+
+import One from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { One } from 'two';
+
+
+`;
+
+exports[`import-rename-codemod Should move only default import: Should move only default import 1`] = `
+
+import ADefault, { One, Two, Three } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import ADefault from 'two';
+import { One, Two, Three } from 'one';
+
+
+`;
+
+exports[`import-rename-codemod When named to default should change import: When named to default should change import 1`] = `
+
+import { One } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import One from 'two';
+
+
+`;
+
+exports[`import-rename-codemod When named to named and imports should be renamed and default should be preserved: When named to named and imports should be renamed and default should be preserved 1`] = `
+
+import ADefault, { One, Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { OneR, TwoR } from 'two';
+import ADefault from 'one';
+
+
+`;
+
+exports[`import-rename-codemod When named to named and imports should be renamed: When named to named and imports should be renamed 1`] = `
+
+import { One, Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { OneR, TwoR } from 'two';
+
+
+`;
+
+exports[`import-rename-codemod When named to named import and multiple imported and all moved it should keep and change import: When named to named import and multiple imported and all moved it should keep and change import 1`] = `
+
+import { One, Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { One, Two } from 'two';
+
+
+`;
+
+exports[`import-rename-codemod When named to named import and multiple imported and only one identifier moved it should keep one import and create new import: When named to named import and multiple imported and only one identifier moved it should keep one import and create new import 1`] = `
+
+import { One, Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { Two } from 'two';
+import { One } from 'one';
+
+
+`;
+
+exports[`import-rename-codemod When named to named import and only one imported should change current import: When named to named import and only one imported should change current import 1`] = `
+
+import { One } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { One } from 'two';
+
+
+`;
+
+exports[`import-rename-codemod When named to named with 'as' import and multiple imported and all moved it should keep and change import: When named to named with 'as' import and multiple imported and all moved it should keep and change import 1`] = `
+
+import { One as OneA, Two as TwoA } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { One as OneA, Two as TwoA } from 'two';
+
+
+`;
+
+exports[`import-rename-codemod When wildcard should move all imports: When wildcard should move all imports 1`] = `
+
+import ADefault, { One, Two, Three } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import ADefault, { One, Two, Three } from 'two';
+
+
+`;

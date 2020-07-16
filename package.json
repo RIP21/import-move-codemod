@@ -1,0 +1,41 @@
+{
+  "name": "import-move-codemod",
+  "version": "0.0.0",
+  "description": "This babel plugin should be used as codemod for bulk import refactorings a.k.a module move refactorings",
+  "repository": "https://github.com/RIP21/import-mode-codemod",
+  "license": "MIT",
+  "author": "https://github.com/RIP21/",
+  "main": "src/index.ts",
+  "keywords": [
+    "babel-plugin",
+    "babel-codemod",
+    "codemod",
+    "import",
+    "rename",
+    "move",
+    "typescript",
+    "javascript",
+    "refactoring"
+  ],
+  "devDependencies": {
+    "@types/babel__core": "^7.1.9",
+    "@types/prettier": "^2.0.2",
+    "babel-plugin-tester": "8.0.1",
+    "np": "^6.3.2",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.1.2",
+    "jest": "^26.1.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "ts-node manualRun.ts",
+    "release": "np"
+  },
+  "dependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/helper-plugin-utils": "^7.10.4",
+    "@babel/plugin-syntax-typescript": "^7.10.4"
+  }
+}

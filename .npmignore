@@ -1,0 +1,6 @@
+src/test/
+.editorconfig
+.gitignore
+manualRun.ts
+yarn.lock
+*.log
