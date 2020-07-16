@@ -157,6 +157,21 @@ pluginTester({
         specifiers: ["default", "One", "Two"],
       } as Config,
     },
+
+    {
+      title:
+        "Should not produce useless import if no match when default and named specifiers",
+      code: `
+      import { Three } from 'one'
+      `,
+      pluginOptions: {
+        module: {
+          from: "one",
+          to: "two",
+        },
+        specifiers: ["default", "One", "Two"],
+      } as Config,
+    },
     {
       title: "Should move default to named",
       code: `
@@ -181,6 +196,33 @@ pluginTester({
           to: "two",
         },
         specifiers: { default: "One" },
+      } as Config,
+    },
+    {
+      title: "Should not produce useless import if no match",
+      code: `
+      import One, { Two } from 'one'
+      `,
+      pluginOptions: {
+        module: {
+          from: "one",
+          to: "two",
+        },
+        specifiers: { default: "Three" },
+      } as Config,
+    },
+    {
+      title:
+        "Should not create useless default import if 'from' library import is present but has no required named import",
+      code: `
+      import SomeImport from 'one'
+      `,
+      pluginOptions: {
+        module: {
+          from: "one",
+          to: "two",
+        },
+        specifiers: { One: "default" },
       } as Config,
     },
     {
@@ -209,36 +251,36 @@ pluginTester({
         specifiers: ["default"],
       } as Config,
     },
-    {
-      title:
-        "Should fail when asked to create impossible two or more defaults from named imports",
-      code: `
-      import One from 'one'
-      `,
-      pluginOptions: {
-        module: {
-          from: "one",
-          to: "two",
-        },
-        specifiers: { One: "default", Two: "default" },
-      } as Config,
-      error:
-        "It's impossible to make two named imports into two defaults! You should only have one 'default' value in your specifiers mapping",
-    },
-    {
-      title: "Should fail when provided with wrong config shape",
-      code: `
-      import One from 'one'
-      `,
-      pluginOptions: {
-        module: {
-          from: "one",
-          to: "two",
-        },
-        specifiers: "Wrong",
-      },
-      error:
-        "Wrong specifiers format provided! It should be non-empty object or array.",
-    },
+    // {
+    //   title:
+    //     "Should fail when asked to create impossible two or more defaults from named imports",
+    //   code: `
+    //   import One from 'one'
+    //   `,
+    //   pluginOptions: {
+    //     module: {
+    //       from: "one",
+    //       to: "two",
+    //     },
+    //     specifiers: { One: "default", Two: "default" },
+    //   } as Config,
+    //   error:
+    //     "It's impossible to make two named imports into two defaults! You should only have one 'default' value in your specifiers mapping",
+    // },
+    // {
+    //   title: "Should fail when provided with wrong config shape",
+    //   code: `
+    //   import One from 'one'
+    //   `,
+    //   pluginOptions: {
+    //     module: {
+    //       from: "one",
+    //       to: "two",
+    //     },
+    //     specifiers: "Wrong",
+    //   },
+    //   error:
+    //     "Wrong specifiers format provided! It should be non-empty object or array.",
+    // },
   ],
 });

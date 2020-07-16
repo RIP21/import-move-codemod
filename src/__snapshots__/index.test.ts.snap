@@ -1,25 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`import-rename-codemod Should fail when asked to create impossible two or more defaults from named imports: Should fail when asked to create impossible two or more defaults from named imports 1`] = `
-
-import One from 'one'
-
-      ↓ ↓ ↓ ↓ ↓ ↓
-
-Error: [BABEL] unknown: It's impossible to make two or more named imports into two or more defaults in one import statement! You should only have one 'default' value in your specifiers mapping (While processing: "base$0")
-
-`;
-
-exports[`import-rename-codemod Should fail when provided with wrong config shape: Should fail when provided with wrong config shape 1`] = `
-
-import One from 'one'
-
-      ↓ ↓ ↓ ↓ ↓ ↓
-
-Error: [BABEL] unknown: Wrong specifiers format provided! It should be non-empty object or array. (While processing: "base$0")
-
-`;
-
 exports[`import-rename-codemod Should move default import and named imports: Should move default import and named imports 1`] = `
 
 import ADefault, { One, Two, Three } from 'one'
@@ -85,6 +65,39 @@ import ADefault, { One, Two, Three } from 'one'
 
 import ADefault from 'two';
 import { One, Two, Three } from 'one';
+
+
+`;
+
+exports[`import-rename-codemod Should not create useless default import if 'from' library import is present but has no required named import: Should not create useless default import if 'from' library import is present but has no required named import 1`] = `
+
+import SomeImport from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import SomeImport from 'one';
+
+
+`;
+
+exports[`import-rename-codemod Should not produce useless import if no match when default and named specifiers: Should not produce useless import if no match when default and named specifiers 1`] = `
+
+import { Three } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import { Three } from 'one';
+
+
+`;
+
+exports[`import-rename-codemod Should not produce useless import if no match: Should not produce useless import if no match 1`] = `
+
+import One, { Two } from 'one'
+
+      ↓ ↓ ↓ ↓ ↓ ↓
+
+import One, { Two } from 'one';
 
 
 `;

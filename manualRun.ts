@@ -4,7 +4,7 @@ import { transform } from "@babel/core";
 import { Config } from "./src";
 
 const check = `
-   import { One } from 'one'
+   import One, { Two } from 'one'
 `;
 
 const options = {
@@ -12,9 +12,7 @@ const options = {
     from: "one",
     to: "two",
   },
-  specifiers: {
-    One: "default",
-  },
+  specifiers: { default: "Three" },
 } as Config;
 
 const result =

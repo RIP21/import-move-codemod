@@ -47,6 +47,10 @@ const shouldMoveDefaultToNamed = (config: Config) => {
   );
 };
 
+const getShouldMoveDefaultToNamedName = (config: Config) => {
+  return !Array.isArray(config.specifiers) && config.specifiers.default;
+};
+
 const shouldMoveAll = (config: Config) => {
   return Array.isArray(config.specifiers) && config.specifiers[0] === "*";
 };
@@ -58,26 +62,32 @@ const getNamedIdentifierToDefault = (config: Config) => {
 };
 
 export default declare((_: any, options: Config) => {
-  if (
-    options.specifiers?.length === 0 ||
-    typeof options.specifiers !== "object"
-  ) {
-    throw new Error(
-      "Wrong specifiers format provided! It should be non-empty object or array."
-    );
-  }
-  if (
-    typeof options.specifiers === "object" &&
-    Object.values(options.specifiers).filter((it) => it === "default").length >
-      1
-  ) {
-    throw new Error(
-      "It's impossible to make two or more named imports into two or more defaults in one import statement! You should only have one 'default' value in your specifiers mapping"
-    );
+  // if (
+  //   options.specifiers?.length === 0 ||
+  //   typeof options.specifiers !== "object"
+  // ) {
+  //   throw new Error(
+  //     "Wrong specifiers format provided! It should be non-empty object or array."
+  //   );
+  // }
+  // if (
+  //   typeof options.specifiers === "object" &&
+  //   Object.values(options.specifiers).filter((it) => it === "default").length >
+  //     1
+  // ) {
+  //   throw new Error(
+  //     "It's impossible to make two or more named imports into two or more defaults in one import statement! You should only have one 'default' value in your specifiers mapping"
+  //   );
+  // }
+
+  if (typeof options === "object" && Object.keys(options).length === 0) {
+    return {
+      visitor: {},
+    };
   }
 
   return {
-    name: "import-rename-codemod",
+    name: "import-move-codemod",
     inherits: typescript,
     visitor: {
       Program(path) {
@@ -108,20 +118,29 @@ export default declare((_: any, options: Config) => {
             [],
             t.stringLiteral(to)
           );
+          // { One: "default" } case
           if (shouldChangeNamedToDefault(options)) {
-            newImportDeclaration.specifiers = [
-              t.importDefaultSpecifier(
-                t.identifier(getNamedIdentifierToDefault(options))
-              ),
-            ];
+            if (
+              path.node.specifiers.find(
+                (it) =>
+                  (it as ImportSpecifier)?.imported?.name ===
+                  getNamedIdentifierToDefault(options)
+              )
+            ) {
+              newImportDeclaration.specifiers = [
+                t.importDefaultSpecifier(
+                  t.identifier(getNamedIdentifierToDefault(options))
+                ),
+              ];
 
-            const filterMovedToDefaultNamedImport = (it: any) =>
-              t.isImportSpecifier(it) &&
-              !(it.imported.name === getNamedIdentifierToDefault(options));
+              const filterMovedToDefaultNamedImport = (it: any) =>
+                t.isImportSpecifier(it) &&
+                !(it.imported.name === getNamedIdentifierToDefault(options));
 
-            path.node.specifiers = path.node.specifiers.filter(
-              filterMovedToDefaultNamedImport
-            );
+              path.node.specifiers = path.node.specifiers.filter(
+                filterMovedToDefaultNamedImport
+              );
+            }
           }
           const namedSpecifiersToMove = node.specifiers.filter(
             (it) =>
@@ -166,18 +185,12 @@ export default declare((_: any, options: Config) => {
             aDefaultSpecifier &&
               newImportDeclaration.specifiers.unshift(aDefaultSpecifier);
           }
-          // { One: "default" } case
-          if (shouldChangeNamedToDefault(options)) {
-            newImportDeclaration.specifiers.concat(
-              t.importDefaultSpecifier(
-                t.identifier(getNamedIdentifierToDefault(options))
-              )
-            );
-          }
           // { "default" : "One" } case
           if (shouldMoveDefaultToNamed(options)) {
-            const aDefaultSpecifier = node.specifiers.find((it) =>
-              t.isImportDefaultSpecifier(it)
+            const aDefaultSpecifier = node.specifiers.find(
+              (it) =>
+                t.isImportDefaultSpecifier(it) &&
+                getShouldMoveDefaultToNamedName(options) === it.local.name
             );
             if (aDefaultSpecifier) {
               const newNamedSpecifier = t.importSpecifier(
