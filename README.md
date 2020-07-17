@@ -1,4 +1,5 @@
 # import-move-codemod
+![npm](https://img.shields.io/npm/v/import-move-codemod)
 
 Codemod to move imports from one module to another. Super useful in huge monorepos or huge migrations of 3rd party packages.
 
