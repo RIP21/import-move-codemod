@@ -88,7 +88,7 @@ export default declare((_: any, options: Config) => {
 
   return {
     name: "import-move-codemod",
-    inherits: typescript,
+    inherits: () => typescript(_, { ...options, isTSX: true }),
     visitor: {
       Program(path) {
         const from = getFrom(options);
