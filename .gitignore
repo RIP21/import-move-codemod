@@ -59,4 +59,4 @@ typings/
 
 .idea
 .history
-!/cjs/
+cjs
