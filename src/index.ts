@@ -80,12 +80,6 @@ export default declare((_: any, options: Config) => {
   //   );
   // }
 
-  if (typeof options === "object" && Object.keys(options).length === 0) {
-    return {
-      visitor: {},
-    };
-  }
-
   return {
     name: "import-move-codemod",
     inherits: () => typescript(_, { ...options, isTSX: true }),

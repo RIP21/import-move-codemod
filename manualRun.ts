@@ -21,5 +21,5 @@ const result =
   })?.code ?? "";
 
 console.log(
-  format(result, { semi: false, singleQuote: true, parser: "babel" })
+  format(result, { semi: false, singleQuote: true, parser: "typescript" })
 );
