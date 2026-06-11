@@ -3,6 +3,10 @@
   "version": "0.0.3",
   "description": "This babel plugin should be used as codemod for bulk import refactorings a.k.a module move refactorings",
   "repository": "https://github.com/RIP21/import-move-codemod",
+  "homepage": "https://github.com/RIP21/import-move-codemod#readme",
+  "bugs": {
+    "url": "https://github.com/RIP21/import-move-codemod/issues"
+  },
   "license": "MIT",
   "author": "https://github.com/RIP21/",
   "main": "cjs/src/index.js",
